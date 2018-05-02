@@ -3,21 +3,38 @@
 %returns the solution of x.
 
 function  x = my_omp(k, A, y)
-
+     res_norm = [];
+     sig_norm = [];
     atom_vector = zeros(size(A,2),1);
     ind_atom=[];
     res=y;
     count = 1;
+    A_dup = A;
     while count < k+1
         inner_product = abs(A' * res);
         [atom, atom_index] = max(inner_product);
         ind_atom = [ind_atom atom_index];
-        xfinal = A(:, ind_atom)\y;
-        res = y-A(:,ind_atom) * xfinal;
+        xfinal = A_dup(:, ind_atom)\y;
+        res = y-A_dup(:,ind_atom) * xfinal;
+        
+        for i = 1 : size(A,2)
+            A(:,i) = A(:,i) - A(:,i)'*A(:,atom_index) * A(:,atom_index);
+        end   
+        
+        res_norm = [res_norm norm(res,1)];
+        sig_norm = [sig_norm norm(y,1)];
+        
+        if (res_norm(count)) < .33*sig_norm(count) 
+            break; 
+        end
+        
         count = count + 1;
     end
     x = atom_vector;
     t = ind_atom';
     x(t) = xfinal;
+    figure
+    plot(res_norm./sig_norm);
+    
 end
 
