@@ -37,8 +37,12 @@ figure;
 plotdgtreal(G_sn,a,M,Fs);
 title('Gabor coefficients of noisy signal');
 
-lambda = sqrt(sigma_noise); %%%%%%vary lambda here!
-l = lambda
+i=1;
+snr_array = [];
+l = logspace(-3,-1);
+while(i<=50) 
+% lambda = sqrt(sigma_noise); %%%%%%vary lambda here!
+lambda = l(i)
 G_sd = G_sn.*max(0,1-lambda./abs(G_sn));
 
 % WG Lasso
@@ -68,16 +72,29 @@ W = W(:, c : NG + c -1);
 W = sqrt(W);
 G_sd = G_sn.*max(0,1-(lambda./W));
 
-figure;
-plotdgtreal(G_sd,a,M,Fs);
-title('Gabor coeff. after WGLASSO thresholding');
+% figure;
+% plotdgtreal(G_sd,a,M,Fs);
+% title('Gabor coeff. after WGLASSO thresholding');
+% hold on
 
 % snr
 sd = idgtreal(G_sd,g,a,M,T);
 disp(snr(s,sd-s));
 snrlasso = snr(s,sd-s);
+snr_array = [snr_array snrlasso];
 
-% ISTA ------- Iterative thresholding
+% i = i*10;
+% i = i + 0.1;
+i=i+1;
+
+end
+
+figure; plot(l,snr_array); 
+title('Variation of SNR with hyperparameter lambda')
+xlabel('lambda') % x-axis label
+ylabel('SNR (in dB)') % y-axis label
+
+% Iterative thresholding
 % 
 % nbit = 30; %number of iteration for ISTA
 % nb_xp = 30; % number of values for the parameter
