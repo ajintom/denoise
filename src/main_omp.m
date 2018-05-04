@@ -5,14 +5,14 @@ load cuspamax;
 
 [y, fs]=audioread('sine400.wav');
 %y = y(1:10:132000);
-y = y(1:220);
-
-y = cuspamax';
-y = y - y(1); 
-y = y/max(abs(y(:)));
+y = y(1:fs);
+% 
+% y = cuspamax';
+% y = y - y(1); 
+% y = y/max(abs(y(:)));
 
 iter = 20;
-err = 13;  %40 for sine, change dict also, else 13
+err = 40;  %40 for sine, change dict also, else 13
 
 %induce noise
 snrlevel = 15;
@@ -23,7 +23,7 @@ figure;
 plot(yn);
 title('Signal with AWGN')
 
-mpdict = wmpdictionary(length(y),'lstcpt',{'dct'}); %dct or sin
+mpdict = wmpdictionary(length(y),'lstcpt',{'sin'}); %dct or sin
 
 for i = 1 : size(mpdict,2)
         mpdict(:,i) = mpdict(:,i) / norm(mpdict(:,i));

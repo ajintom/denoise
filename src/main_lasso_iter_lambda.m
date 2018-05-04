@@ -72,10 +72,10 @@ W = W(:, c : NG + c -1);
 W = sqrt(W);
 G_sd = G_sn.*max(0,1-(lambda./W));
 
-% figure;
-% plotdgtreal(G_sd,a,M,Fs);
-% title('Gabor coeff. after WGLASSO thresholding');
-% hold on
+figure;
+plotdgtreal(G_sd,a,M,Fs);
+title('Gabor coeff. after WGLASSO thresholding');
+hold on
 
 % snr
 sd = idgtreal(G_sd,g,a,M,T);
@@ -92,7 +92,7 @@ end
 figure; plot(l,snr_array); 
 title('Variation of SNR with hyperparameter lambda')
 xlabel('lambda') % x-axis label
-ylabel('SNR') % y-axis label
+ylabel('SNR (in dB)') % y-axis label
 
 % Iterative thresholding
 % 
