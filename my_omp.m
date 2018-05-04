@@ -2,13 +2,12 @@
 %y is the output field, A is the dictionary and k is the sparsity. It
 %returns the solution of x.
 
-function  x = my_omp(k, A, y, truth)
+function  [x,iter] = my_omp(k, A, y, truth, thresh)
     %initialising residue and atoms_array 
     atom_vector = zeros(size(A,2),1);
     ind_atom=[];
     res=y;
     
-    thresh = 0;
     res_norm = [];
     sig_norm = [];
     
@@ -55,6 +54,6 @@ function  x = my_omp(k, A, y, truth)
     figure
     plot(res_norm./sig_norm);
     title('SRR')
-    
+    iter = count;
 end
 
